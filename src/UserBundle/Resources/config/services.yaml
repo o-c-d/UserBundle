@@ -1,0 +1,25 @@
+services:
+    # Ocd\UserBundle\:
+    #     resource: '../../*'
+    #     exclude: '../../{DependencyInjection,Exception,Model,Resources,Security}'
+
+    Ocd\UserBundle\Model\Manager\OcdUserManager:
+        arguments: ['%ocd_user.user_class%', '@doctrine', '@security.encoder_factory']
+        public: true
+
+    Ocd\UserBundle\Security\OcdUserProvider:
+        arguments: ['%ocd_user.user_class%', '@doctrine', '@security.encoder_factory']
+        public: true
+
+    Ocd\UserBundle\Security\OcdUserChecker:
+        arguments: ['@doctrine']
+        public: true
+
+    ocd_user_manager:
+        alias: Ocd\UserBundle\Model\Manager\OcdUserManager
+
+    Ocd\UserBundle\Command\OcdUserListCommand:
+        arguments: ['@ocd_user_manager']
+        tags:
+            - { name: 'console.command', command: 'ocd:user:list' }
+        public: true
