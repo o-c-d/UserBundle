@@ -1,7 +1,7 @@
 <?php
 
 namespace Ocd\UserBundle\Security;
-
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Ocd\UserBundle\Exception\AccountDeletedException;
 use Ocd\UserBundle\Exception\AccountLockedException;
 use Ocd\UserBundle\Exception\PasswordResetRequiredException;
@@ -17,7 +17,7 @@ class OcdUserChecker implements UserCheckerInterface
 {
     private $registry;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(Registry $registry)
     {
         $this->registry = $registry;
     }
