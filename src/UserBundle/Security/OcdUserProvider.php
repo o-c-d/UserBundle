@@ -3,6 +3,7 @@
 namespace Ocd\UserBundle\Security;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Registry ;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -15,7 +16,7 @@ class OcdUserProvider implements UserProviderInterface
     private $registry;
     private $encoder;
     
-    public function __construct($userClass, RegistryInterface $registry, EncoderFactoryInterface $encoder)
+    public function __construct($userClass, Registry $registry, EncoderFactoryInterface $encoder)
     {
         $this->userClass = $userClass;
         $this->registry = $registry;

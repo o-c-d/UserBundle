@@ -40,7 +40,7 @@ class OcdUserListCommand extends Command
 
     private $userManager;
 
-    public function __construct( OcdUserManager $userManager)
+    public function __construct(OcdUserManager $userManager)
     {
         parent::__construct();
 
@@ -93,12 +93,14 @@ HELP
         $usersAsPlainArrays = array_map(function (User $user) {
             return [
                 $user->getId(),
-                $user->getFullName(),
                 $user->getUsername(),
                 $user->getEmail(),
                 implode(', ', $user->getRoles()),
+                ( $user instanceof AntiLoginFloodInterface ? $user->getLastSeen() : null ),
             ];
         }, $allUsers);
+
+        $countUsers = count($usersAsPlainArrays);
 
         // In your console commands you should always use the regular output type,
         // which outputs contents directly in the console window. However, this
@@ -108,11 +110,16 @@ HELP
         $bufferedOutput = new BufferedOutput();
         $io = new SymfonyStyle($input, $bufferedOutput);
         $io->title('List Users');
-        $io->text(count($allUsers)." users found");
+        if($countUsers>0){
         $io->table(
-            ['ID', 'Full Name', 'Username', 'Email', 'Roles'],
+            ['ID', 'Username', 'Email', 'Roles'],
             $usersAsPlainArrays
         );
+        $io->text($countUsers." users.");
+
+        } else {
+            $io->text("No user found.");
+        }
 
         // instead of just displaying the table of users, store its contents in a variable
         $usersAsATable = $bufferedOutput->fetch();

@@ -2,10 +2,17 @@ services:
     # Ocd\UserBundle\:
     #     resource: '../../*'
     #     exclude: '../../{DependencyInjection,Exception,Model,Resources,Security}'
+    Ocd\UserBundle\Controller\:
+        resource: '../../Controller/*'
+        public: false
+        tags: ['controller.service_arguments']
 
     Ocd\UserBundle\Model\Manager\OcdUserManager:
         arguments: ['%ocd_user.user_class%', '@doctrine', '@security.encoder_factory']
         public: true
+
+    ocd_user_manager:
+        alias: Ocd\UserBundle\Model\Manager\OcdUserManager
 
     Ocd\UserBundle\Security\OcdUserProvider:
         arguments: ['%ocd_user.user_class%', '@doctrine', '@security.encoder_factory']
@@ -15,11 +22,14 @@ services:
         arguments: ['@doctrine']
         public: true
 
-    ocd_user_manager:
-        alias: Ocd\UserBundle\Model\Manager\OcdUserManager
-
     Ocd\UserBundle\Command\OcdUserListCommand:
         arguments: ['@ocd_user_manager']
         tags:
             - { name: 'console.command', command: 'ocd:user:list' }
+        public: true
+
+    Ocd\UserBundle\Command\OcdUserCreateCommand:
+        arguments: ['@ocd_user_manager', '@security.password_encoder']
+        tags:
+            - { name: 'console.command', command: 'ocd:user:create' }
         public: true

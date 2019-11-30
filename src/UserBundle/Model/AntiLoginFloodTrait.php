@@ -2,41 +2,54 @@
 
 namespace Ocd\UserBundle\Model;
 
-
 trait AntiLoginFloodTrait
 {
 
     /**
      * Count consecutive Login Try on this account with a wrong password
      * Reseted on each successfull login
+     * @var integer
+     *
      * @ORM\Column(name="password_fails", type="integer", options={"default" : 0})
      */
     protected $passFails=0;
 
     /**
      * Last time a Login Failed
-     * @var \DateTime
+     * @var \DateTime|null
      *
-     * @ORM\Column(name="last_try", type="datetime", nullable=true)
+     * @ORM\Column(name="last_try_at", type="datetime", nullable=true)
      */
-    protected $lastTry;
+    protected $lastFailAt;
 
     /**
      * Last time a Login Succeded
-     * @var \DateTime
+     * @var \DateTime|null
      *
-     * @ORM\Column(name="last_seen", type="datetime", nullable=true)
+     * @ORM\Column(name="last_login_at", type="datetime", nullable=true)
      */
-    protected $lastSeen;
+    protected $lastLoginAt;
+
+    /**
+     * Last time a Session has been active
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="last_seen_at", type="datetime", nullable=true)
+     */
+    protected $lastSeenAt;
 
     /**
      * Last IP used to login
+     * @var string|null
+     *
      * @ORM\Column(name="last_ip", type="string", nullable=true)
      */
     protected $lastIP;
 
     /**
      * Last User Agent used to login
+     * @var string|null
+     *
      * @ORM\Column(name="last_ua", type="string", nullable=true)
      */
     protected $lastUA;
@@ -44,8 +57,10 @@ trait AntiLoginFloodTrait
 
     /**
      * Get count consecutive Login Try on this account with a wrong password
-     */ 
-    public function getPassFails()
+     *
+     * @return int
+     */
+    public function getPassFails(): int
     {
         return $this->passFails;
     }
@@ -53,9 +68,11 @@ trait AntiLoginFloodTrait
     /**
      * Set count consecutive Login Try on this account with a wrong password
      *
-     * @return  self
-     */ 
-    public function setPassFails($passFails)
+     * @param int $passFails
+     * 
+     * @return self
+     */
+    public function setPassFails(int $passFails): self
     {
         $this->passFails = $passFails;
 
@@ -63,25 +80,48 @@ trait AntiLoginFloodTrait
     }
 
     /**
+     * New Login Fail for user
+     *
+     * @return self
+     */
+    public function newLoginFail(): self
+    {
+        $this->passFails++;
+        $this->lastFailAt = new \DateTime();
+        return $this;
+    }
+
+    /**
+     * New Login Success for user
+     *
+     * @return self
+     */
+    public function newLoginSuccess(): self
+    {
+        $this->passFails=0;
+        $this->lastLoginAt = new \DateTime();
+        return $this;
+    }
+
+    /**
      * Get last time a Login Failed
      *
-     * @return  \DateTime
-     */ 
-    public function getLastTry()
+     * @return  \DateTime|null
+     */
+    public function getLastFailAt(): ?\DateTime
     {
-        return $this->lastTry;
+        return $this->lastFailAt;
     }
 
     /**
      * Set last time a Login Failed
      *
-     * @param  \DateTime  $lastTry  Last time a Login Failed
-     *
+     * @param  \DateTime  $lastFailAt
      * @return  self
-     */ 
-    public function setLastTry(\DateTime $lastTry)
+     */
+    public function setLastFailAt(\DateTime $lastFailAt): self
     {
-        $this->lastTry = $lastTry;
+        $this->lastFailAt = $lastFailAt;
 
         return $this;
     }
@@ -89,31 +129,55 @@ trait AntiLoginFloodTrait
     /**
      * Get last time a Login Succeded
      *
-     * @return  \DateTime
-     */ 
-    public function getLastSeen()
+     * @return  \DateTime|null
+     */
+    public function getLasLoginAt(): ?\DateTime
     {
-        return $this->lastSeen;
+        return $this->lastLoginAt;
     }
 
     /**
      * Set last time a Login Succeded
      *
-     * @param  \DateTime  $lastSeen  Last time a Login Succeded
-     *
+     * @param  \DateTime  $lastLoginAt
      * @return  self
-     */ 
-    public function setLastSeen(\DateTime $lastSeen)
+     */
+    public function setLastLoginAt(\DateTime $lastLoginAt): self
     {
-        $this->lastSeen = $lastSeen;
+        $this->lastLoginAt = $lastLoginAt;
+
+        return $this;
+    }
+
+    /**
+     * Get last time a Session has been active
+     *
+     * @return  \DateTime|null
+     */
+    public function getLastSeenAt(): ?\DateTime
+    {
+        return $this->lastSeenAt;
+    }
+
+    /**
+     * Set last time a Session has been active
+     *
+     * @param  \DateTime  $lastSeenAt
+     * @return  self
+     */
+    public function setLastSeenAt(\DateTime $lastSeenAt): self
+    {
+        $this->lastSeenAt = $lastSeenAt;
 
         return $this;
     }
 
     /**
      * Get last IP used to login
-     */ 
-    public function getLastIP()
+     *
+     * @return string|null
+     */
+    public function getLastIP(): ?string
     {
         return $this->lastIP;
     }
@@ -121,9 +185,10 @@ trait AntiLoginFloodTrait
     /**
      * Set last IP used to login
      *
-     * @return  self
-     */ 
-    public function setLastIP($lastIP)
+     * @param string $lastIP
+     * @return self
+     */
+    public function setLastIP(string $lastIP): self
     {
         $this->lastIP = $lastIP;
 
@@ -132,8 +197,10 @@ trait AntiLoginFloodTrait
 
     /**
      * Get last User Agent used to login
-     */ 
-    public function getLastUA()
+     *
+     * @return string|null
+     */
+    public function getLastUA(): ?string
     {
         return $this->lastUA;
     }
@@ -141,12 +208,17 @@ trait AntiLoginFloodTrait
     /**
      * Set last User Agent used to login
      *
-     * @return  self
-     */ 
-    public function setLastUA($lastUA)
+     * @param string $lastUA
+     * @return self
+     */
+    public function setLastUA(string $lastUA): self
     {
         $this->lastUA = $lastUA;
 
         return $this;
     }
+
+
+
+
 }

@@ -2,31 +2,31 @@
 
 
 security_login:
-    controller: Ocd\UserBundle\Controller\UserController::login
+    controller: Ocd\UserBundle\Controller\SecurityController::login
     path:
         en: /login
         fr: /connexion
 
 security_logout:
-    controller: Ocd\UserBundle\Controller\UserController::logout
+    controller: Ocd\UserBundle\Controller\SecurityController::logout
     path:
         en: /logout
         fr: /deconnexion
 
 security_profile:
-    controller: Ocd\UserBundle\Controller\UserController::profile
+    controller: Ocd\UserBundle\Controller\SecurityController::profile
     path:
         en: /profile
         fr: /profil
 
 security_forgot_password_request:
-    controller: Ocd\UserBundle\Controller\UserController::forgotPasswordRequest
+    controller: Ocd\UserBundle\Controller\SecurityController::forgotPasswordRequest
     path:
         en: /forgot_password
         fr: /mot_passe_perdu
 
 security_forgot_password_reset:
-    controller: Ocd\UserBundle\Controller\UserController::forgotPasswordReset
+    controller: Ocd\UserBundle\Controller\SecurityController::forgotPasswordReset
     path:
         en: /forgot_password/{token}
         fr: /mot_passe_perdu/{token}

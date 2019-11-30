@@ -11,6 +11,7 @@ trait AdvancedUserTrait
      * DateTime of Password Expiration
      * => Login is not allowed after this date
      * => Is nullified on Password update
+     * @var \DateTime|null
      * 
      * @ORM\Column(name="password_expired_at", type="datetime", nullable=true, options={"default": NULL})
      */
@@ -19,6 +20,7 @@ trait AdvancedUserTrait
     /**
      * DateTime of Account Deletion
      * => Login is not allowed after this date
+     * @var \DateTime|null
      * 
      * @ORM\Column(name="account_deleted_at", type="datetime", nullable=true, options={"default": NULL})
      */
@@ -27,6 +29,7 @@ trait AdvancedUserTrait
     /**
      * DateTime of Account Expiration
      * => Login is not allowed after this date
+     * @var \DateTime|null
      * 
      * @ORM\Column(name="account_expired_at", type="datetime", nullable=true, options={"default": NULL})
      */
@@ -35,13 +38,16 @@ trait AdvancedUserTrait
     /**
      * DateTime of Account Lock
      * => Login is not allowed after this date
-     * 
+     * @var \DateTime|null
+     *
      * @ORM\Column(name="account_locked_at", type="datetime", nullable=true, options={"default": NULL})
      */
     protected $accountLockedAt;
 
     /**
      * Account is Enabled
+     * @var bool
+     * 
      * @ORM\Column(name="account_is_enabled", type="boolean", options={"default": "0"})
      */
     protected $accountIsEnabled;

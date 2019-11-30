@@ -44,30 +44,28 @@ use Symfony\Component\Stopwatch\Stopwatch;
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class AddUserCommand extends Command
+class OcdUserCreateCommand extends Command
 {
     // to make your command lazily loaded, configure the $defaultName static property,
     // so it will be instantiated only when the command is actually called.
-    protected static $defaultName = 'ocd:user:add';
+    protected static $defaultName = 'ocd:user:create';
 
     /**
      * @var SymfonyStyle
      */
     private $io;
 
-    private $entityManager;
+    private $userManager;
     private $passwordEncoder;
     private $validator;
-    private $users;
 
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, Validator $validator, UserRepository $users)
+    public function __construct(OcdUserManager $userManager, UserPasswordEncoderInterface $encoder, Validator $validator)
     {
         parent::__construct();
 
-        $this->entityManager = $em;
+        $this->userManager = $userManager;
         $this->passwordEncoder = $encoder;
         $this->validator = $validator;
-        $this->users = $users;
     }
 
     /**
@@ -170,7 +168,8 @@ class AddUserCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $stopwatch = new Stopwatch();
-        $stopwatch->start('add-user-command');
+        $stopwatch->start('ocd-user-create-command');
+
 
         $username = $input->getArgument('username');
         $plainPassword = $input->getArgument('password');
@@ -197,7 +196,7 @@ class AddUserCommand extends Command
 
         $this->io->success(sprintf('%s was successfully created: %s (%s)', $isAdmin ? 'Administrator user' : 'User', $user->getUsername(), $user->getEmail()));
 
-        $event = $stopwatch->stop('add-user-command');
+        $event = $stopwatch->stop('ocd-user-create-command');
         if ($output->isVerbose()) {
             $this->io->comment(sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2)));
         }
