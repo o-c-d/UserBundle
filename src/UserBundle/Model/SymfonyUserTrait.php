@@ -11,14 +11,14 @@ trait SymfonyUserTrait
      * @ORM\Column(name="username", type="string", unique=true)
      * @Assert\NotBlank(message="user.username.not_blank")
      */
-    private $username;
+    protected $username;
 
     /**
      * @ORM\Column(name="email", type="string", unique=true)
      * @Assert\NotBlank(message="user.email.not_blank")
      * @Assert\Email(message="user.email.not_valid")
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(name="password", type="string", length=64)
@@ -34,7 +34,7 @@ trait SymfonyUserTrait
      *      skipOnError=true
      * )
      */
-    private $password;
+    protected $password;
 
     /**
      * Plain password. Used for model validation. Must not be persisted.
@@ -46,18 +46,18 @@ trait SymfonyUserTrait
     /**
      * @ORM\Column(name="salt", type="string", nullable=true)
      */
-    private $salt;
+    protected $salt;
 
     /**
      * @ORM\Column(name="roles", type="array")
      */
-    private $roles = [];
+    protected $roles = [];
 
 
     /**
      * Get the value of username
      */
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -67,7 +67,7 @@ trait SymfonyUserTrait
      *
      * @return  self
      */
-    public function setUsername($username)
+    public function setUsername(string $username) :self
     {
         $this->username = $username;
 
@@ -77,17 +77,15 @@ trait SymfonyUserTrait
     /**
      * Get the value of password
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
     /**
      * Set the value of password
-     *
-     * @return  self
      */
-    public function setPassword($password)
+    public function setPassword(string $password) :self
     {
         $this->password = $password;
 
@@ -101,6 +99,7 @@ trait SymfonyUserTrait
      */
     public function getPlainPassword(): ?string
     {
+        return $this->plainPassword ;
     }
 
     /**
@@ -110,14 +109,16 @@ trait SymfonyUserTrait
      *
      * @return $this
      */
-    public function setPlainPassword(?string $plainPassword)
+    public function setPlainPassword(?string $plainPassword) :self
     {
+        $this->plainPassword = $plainPassword;
+        return $this;
     }
 
     /**
      * Get the value of email
      */
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -127,7 +128,7 @@ trait SymfonyUserTrait
      *
      * @return  self
      */
-    public function setEmail($email)
+    public function setEmail(string $email) :self
     {
         $this->email = $email;
 
@@ -137,7 +138,7 @@ trait SymfonyUserTrait
     /**
      * Get the value of roles
      */
-    public function getRoles()
+    public function getRoles() :array
     {
         return $this->roles;
     }
@@ -147,7 +148,7 @@ trait SymfonyUserTrait
      *
      * @return  self
      */
-    public function setRoles($roles)
+    public function setRoles(array $roles=[]) :self
     {
         $this->roles = $roles;
 
@@ -156,7 +157,7 @@ trait SymfonyUserTrait
     /**
      * {@inheritdoc}
      */
-    public function addRole($role)
+    public function addRole(string $role) :self
     {
         $role = strtoupper($role);
         if (!in_array(strtoupper($role), $this->getRoles(), true)) {
@@ -167,7 +168,7 @@ trait SymfonyUserTrait
     /**
      * {@inheritdoc}
      */
-    public function removeRole($role)
+    public function removeRole(string $role) :self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -176,14 +177,19 @@ trait SymfonyUserTrait
         return $this;
     }
 
-    public function getSalt()
+    public function getSalt() :?string
     {
+        return $this->salt;
     }
-    public function setSalt($salt)
+    public function setSalt(?string $salt) :self
     {
+        $this->salt = $salt;
+        return $this;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials() :self
     {
+        $this->plainPassword = null;
+        return $this;
     }
 }

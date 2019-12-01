@@ -2,12 +2,14 @@
 
 namespace Ocd\UserBundle\Model;
 
+use \DateTimeInterface;
+
 interface ResetablePasswordInterface
 {
-    public function getPasswordResetRequestedAt();
-    public function setPasswordResetRequestedAt();
-    public function getPasswordResetToken();
-    public function setPasswordResetToken();
+    public function getPasswordResetRequestedAt() :DateTimeInterface;
+    public function setPasswordResetRequestedAt(DateTimeInterface $passwordResetRequestedAt);
+    public function getPasswordResetToken() :?string;
+    public function setPasswordResetToken(?string $passwordResetToken);
 
 }
 

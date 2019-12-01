@@ -2,6 +2,7 @@
 
 namespace Ocd\UserBundle\Model;
 
+use \DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -14,7 +15,7 @@ trait TimestampableTrait
 {
     /**
      * Creation DateTime
-     * @var \DateTime
+     * @var DateTimeInterface
      * 
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
@@ -22,7 +23,7 @@ trait TimestampableTrait
     
     /**
      * Update DateTime
-     * @var \DateTime
+     * @var DateTimeInterface
      * 
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
@@ -31,10 +32,10 @@ trait TimestampableTrait
     /**
      * Sets createdAt.
      *
-     * @param  \DateTimeInterface $createdAt
+     * @param  DateTimeInterface $createdAt
      * @return $this
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt)
+    public function setCreatedAt(DateTimeInterface $createdAt)
     {
         $this->createdAt = $createdAt;
         return $this;
@@ -43,9 +44,9 @@ trait TimestampableTrait
     /**
      * Returns createdAt.
      *
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -53,10 +54,10 @@ trait TimestampableTrait
     /**
      * Sets updatedAt.
      *
-     * @param  \DateTimeInterface $updatedAt
+     * @param  DateTimeInterface $updatedAt
      * @return $this
      */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt)
+    public function setUpdatedAt(DateTimeInterface $updatedAt)
     {
         $this->updatedAt = $updatedAt;
         return $this;
@@ -67,7 +68,7 @@ trait TimestampableTrait
      *
      * @return \DateTimeInterface
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt() :DateTimeInterface
     {
         return $this->updatedAt;
     }
@@ -77,7 +78,7 @@ trait TimestampableTrait
      *
      * @ORM\PreUpdate
      */
-    public function autoUpdatedAt()
+    public function autoUpdatedAt() :void
     {
         $this->setUpdatedAt(new \Datetime());
     }
@@ -87,7 +88,7 @@ trait TimestampableTrait
      *
      * @ORM\PrePersist
      */
-    public function autoCreatedAt()
+    public function autoCreatedAt() :void
     {
         $this->setCreatedAt(new \Datetime());
         $this->setUpdatedAt(new \Datetime());

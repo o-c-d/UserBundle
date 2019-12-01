@@ -17,14 +17,17 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root(OcdUserExtension::CONFIG_NAME);
+        $treeBuilder = new TreeBuilder(OcdUserExtension::CONFIG_NAME);
 
-        $rootNode
+        $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('user_class')
                     ->info('User entity class (FQDN)')
                     ->defaultValue('App\Entity\User')
+                ->end()
+                ->scalarNode('firewall_name')
+                    ->info('Securitry Firewall Name')
+                    ->defaultValue('main')
                 ->end()
                 ->arrayNode('registration')
                     ->children()

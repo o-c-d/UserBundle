@@ -2,6 +2,9 @@
 
 namespace Ocd\UserBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
+use \DateTimeInterface;
+
 trait AntiLoginFloodTrait
 {
 
@@ -16,7 +19,7 @@ trait AntiLoginFloodTrait
 
     /**
      * Last time a Login Failed
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="last_try_at", type="datetime", nullable=true)
      */
@@ -24,7 +27,7 @@ trait AntiLoginFloodTrait
 
     /**
      * Last time a Login Succeded
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="last_login_at", type="datetime", nullable=true)
      */
@@ -32,7 +35,7 @@ trait AntiLoginFloodTrait
 
     /**
      * Last time a Session has been active
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="last_seen_at", type="datetime", nullable=true)
      */
@@ -72,7 +75,7 @@ trait AntiLoginFloodTrait
      * 
      * @return self
      */
-    public function setPassFails(int $passFails): self
+    public function setPassFails(int $passFails=0): self
     {
         $this->passFails = $passFails;
 
@@ -106,9 +109,9 @@ trait AntiLoginFloodTrait
     /**
      * Get last time a Login Failed
      *
-     * @return  \DateTime|null
+     * @return  DateTimeInterface|null
      */
-    public function getLastFailAt(): ?\DateTime
+    public function getLastFailAt(): ?DateTimeInterface
     {
         return $this->lastFailAt;
     }
@@ -116,10 +119,10 @@ trait AntiLoginFloodTrait
     /**
      * Set last time a Login Failed
      *
-     * @param  \DateTime  $lastFailAt
+     * @param  DateTimeInterface  $lastFailAt
      * @return  self
      */
-    public function setLastFailAt(\DateTime $lastFailAt): self
+    public function setLastFailAt(?DateTimeInterface $lastFailAt): self
     {
         $this->lastFailAt = $lastFailAt;
 
@@ -129,9 +132,9 @@ trait AntiLoginFloodTrait
     /**
      * Get last time a Login Succeded
      *
-     * @return  \DateTime|null
+     * @return  DateTimeInterface|null
      */
-    public function getLasLoginAt(): ?\DateTime
+    public function getLasLoginAt(): ?DateTimeInterface
     {
         return $this->lastLoginAt;
     }
@@ -139,10 +142,10 @@ trait AntiLoginFloodTrait
     /**
      * Set last time a Login Succeded
      *
-     * @param  \DateTime  $lastLoginAt
+     * @param  DateTimeInterface  $lastLoginAt
      * @return  self
      */
-    public function setLastLoginAt(\DateTime $lastLoginAt): self
+    public function setLastLoginAt(?DateTimeInterface $lastLoginAt): self
     {
         $this->lastLoginAt = $lastLoginAt;
 
@@ -152,9 +155,9 @@ trait AntiLoginFloodTrait
     /**
      * Get last time a Session has been active
      *
-     * @return  \DateTime|null
+     * @return  DateTimeInterface|null
      */
-    public function getLastSeenAt(): ?\DateTime
+    public function getLastSeenAt(): ?DateTimeInterface
     {
         return $this->lastSeenAt;
     }
@@ -162,10 +165,10 @@ trait AntiLoginFloodTrait
     /**
      * Set last time a Session has been active
      *
-     * @param  \DateTime  $lastSeenAt
+     * @param  DateTimeInterface  $lastSeenAt
      * @return  self
      */
-    public function setLastSeenAt(\DateTime $lastSeenAt): self
+    public function setLastSeenAt(?DateTimeInterface $lastSeenAt): self
     {
         $this->lastSeenAt = $lastSeenAt;
 
@@ -188,7 +191,7 @@ trait AntiLoginFloodTrait
      * @param string $lastIP
      * @return self
      */
-    public function setLastIP(string $lastIP): self
+    public function setLastIP(?string $lastIP): self
     {
         $this->lastIP = $lastIP;
 
@@ -211,7 +214,7 @@ trait AntiLoginFloodTrait
      * @param string $lastUA
      * @return self
      */
-    public function setLastUA(string $lastUA): self
+    public function setLastUA(?string $lastUA): self
     {
         $this->lastUA = $lastUA;
 

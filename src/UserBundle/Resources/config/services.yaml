@@ -1,3 +1,5 @@
+parameters:
+    ocd_user.firewall_name: 'main'
 services:
     # Ocd\UserBundle\:
     #     resource: '../../*'
@@ -7,9 +9,27 @@ services:
         public: false
         tags: ['controller.service_arguments']
 
+    Ocd\UserBundle\Controller\SecurityController:
+        public: true
+        tags: ['controller.service_arguments']
+
+    Ocd\UserBundle\EventListener\AuthenticationListener:
+        arguments: ['@ocd_user_login_manager', '%ocd_user.firewall_name%']
+        tags: ['kernel.event_subscriber']
+
+    Ocd\UserBundle\EventListener\LastLoginListener:
+        arguments: ['@ocd_user_manager']
+        tags: ['kernel.event_subscriber']
+
     Ocd\UserBundle\Model\Manager\OcdUserManager:
         arguments: ['%ocd_user.user_class%', '@doctrine', '@security.encoder_factory']
         public: true
+
+    Ocd\UserBundle\Model\Validator\Validator:
+        public: true
+        
+    ocd_model_validator:
+        alias: Ocd\UserBundle\Model\Validator\Validator
 
     ocd_user_manager:
         alias: Ocd\UserBundle\Model\Manager\OcdUserManager
@@ -22,6 +42,13 @@ services:
         arguments: ['@doctrine']
         public: true
 
+    Ocd\UserBundle\Security\OcdLoginManager:
+       arguments: ['@security.token_storage', '@security.user_checker', '@security.authentication.session_strategy', '@request_stack']
+       public: true
+
+    ocd_user_login_manager:
+        alias: Ocd\UserBundle\Security\OcdLoginManager
+ 
     Ocd\UserBundle\Command\OcdUserListCommand:
         arguments: ['@ocd_user_manager']
         tags:
@@ -29,7 +56,7 @@ services:
         public: true
 
     Ocd\UserBundle\Command\OcdUserCreateCommand:
-        arguments: ['@ocd_user_manager', '@security.password_encoder']
+        arguments: ['@ocd_user_manager', '@security.password_encoder', '@ocd_model_validator', '@doctrine.orm.entity_manager']
         tags:
             - { name: 'console.command', command: 'ocd:user:create' }
         public: true

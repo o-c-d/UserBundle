@@ -13,7 +13,6 @@ namespace Ocd\UserBundle\Command;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Utils\Validator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -24,6 +23,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Ocd\UserBundle\Model\Manager\OcdUserManager;
+use Ocd\UserBundle\Model\Validator\Validator;
 
 /**
  * A console command that creates users and stores them in the database.
@@ -59,13 +60,14 @@ class OcdUserCreateCommand extends Command
     private $passwordEncoder;
     private $validator;
 
-    public function __construct(OcdUserManager $userManager, UserPasswordEncoderInterface $encoder, Validator $validator)
+    public function __construct(OcdUserManager $userManager, UserPasswordEncoderInterface $encoder, Validator $validator, EntityManagerInterface $entityManager)
     {
         parent::__construct();
 
         $this->userManager = $userManager;
         $this->passwordEncoder = $encoder;
         $this->validator = $validator;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -81,7 +83,6 @@ class OcdUserCreateCommand extends Command
             ->addArgument('username', InputArgument::OPTIONAL, 'The username of the new user')
             ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the new user')
             ->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
-            ->addArgument('full-name', InputArgument::OPTIONAL, 'The full name of the new user')
             ->addOption('admin', null, InputOption::VALUE_NONE, 'If set, the user is created as an administrator')
         ;
     }
@@ -150,15 +151,6 @@ class OcdUserCreateCommand extends Command
             $email = $this->io->ask('Email', null, [$this->validator, 'validateEmail']);
             $input->setArgument('email', $email);
         }
-
-        // Ask for the full name if it's not defined
-        $fullName = $input->getArgument('full-name');
-        if (null !== $fullName) {
-            $this->io->text(' > <info>Full Name</info>: '.$fullName);
-        } else {
-            $fullName = $this->io->ask('Full Name', null, [$this->validator, 'validateFullName']);
-            $input->setArgument('full-name', $fullName);
-        }
     }
 
     /**
@@ -174,15 +166,13 @@ class OcdUserCreateCommand extends Command
         $username = $input->getArgument('username');
         $plainPassword = $input->getArgument('password');
         $email = $input->getArgument('email');
-        $fullName = $input->getArgument('full-name');
         $isAdmin = $input->getOption('admin');
 
         // make sure to validate the user data is correct
-        $this->validateUserData($username, $plainPassword, $email, $fullName);
+        $this->validateUserData($username, $plainPassword, $email);
 
         // create the user and encode its password
         $user = new User();
-        $user->setFullName($fullName);
         $user->setUsername($username);
         $user->setEmail($email);
         $user->setRoles([$isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER']);
@@ -190,6 +180,7 @@ class OcdUserCreateCommand extends Command
         // See https://symfony.com/doc/current/book/security.html#security-encoding-password
         $encodedPassword = $this->passwordEncoder->encodePassword($user, $plainPassword);
         $user->setPassword($encodedPassword);
+        $user->setAccountIsEnabled(1);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -202,10 +193,10 @@ class OcdUserCreateCommand extends Command
         }
     }
 
-    private function validateUserData($username, $plainPassword, $email, $fullName): void
+    private function validateUserData($username, $plainPassword, $email): void
     {
         // first check if a user with the same username already exists.
-        $existingUser = $this->users->findOneBy(['username' => $username]);
+        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
 
         if (null !== $existingUser) {
             throw new RuntimeException(sprintf('There is already a user registered with the "%s" username.', $username));
@@ -214,10 +205,9 @@ class OcdUserCreateCommand extends Command
         // validate password and email if is not this input means interactive.
         $this->validator->validatePassword($plainPassword);
         $this->validator->validateEmail($email);
-        $this->validator->validateFullName($fullName);
 
         // check if a user with the same email already exists.
-        $existingEmail = $this->users->findOneBy(['email' => $email]);
+        $existingEmail = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
         if (null !== $existingEmail) {
             throw new RuntimeException(sprintf('There is already a user registered with the "%s" email.', $email));

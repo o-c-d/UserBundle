@@ -9,16 +9,16 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
-
-class OcdUserManager
+class OcdUserManager implements OcdUserManagerInterface
 {
     /**
      * @var PasswordEncoderInterface
      */
     private $encoderFactory;
 
-    public function __construct($userClass, RegistryInterface $registry, EncoderFactoryInterface $encoderFactory)
+    public function __construct($userClass, Registry $registry, EncoderFactoryInterface $encoderFactory)
     {
         $this->userClass = $userClass;
         $this->registry = $registry;
@@ -56,6 +56,12 @@ class OcdUserManager
             $user->setPassword($hashedPassword);
             $user->eraseCredentials();
         }
+    }
+
+    public function updateUser(UserInterface $user)
+    {
+        $this->registry->getManager()->persist($user);
+        $this->registry->getManager()->flush();
     }
 
 }

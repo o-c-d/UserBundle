@@ -9,33 +9,20 @@ interface SymfonyUserInterface extends UserInterface
     const DEFAULT_ROLE = 'ROLE_USER';
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
     const ROLE_USER_ADMIN = 'ROLE_USER_ADMIN';
-    public function getUsername();
-    public function setUsername(); 
-    public function getPassword();
-    public function setPassword();
-
-    /**
-     * Returns plain-text password.
-     *
-     * @return null|string
-     */
+    public function getUsername() :string;
+    public function setUsername(string $username); 
+    public function getPassword() :string;
+    public function setPassword(string $password);
     public function getPlainPassword(): ?string;
-    /**
-     * Sets plain-text password.
-     *
-     * @param null|string $plainPassword
-     *
-     * @return $this
-     */
     public function setPlainPassword(?string $plainPassword);
-    public function getEmail();
-    public function setEmail();
-    public function getRoles();
-    public function setRoles();
-    public function addRole();
-    public function removeRole();
-    public function getSalt();
-    public function setSalt();
+    public function getEmail() :string;
+    public function setEmail(string $email);
+    public function getRoles() :array;
+    public function setRoles(array $roles);
+    public function addRole(string $role);
+    public function removeRole(string $role);
+    public function getSalt() :?string;
+    public function setSalt(?string $salt);
     public function eraseCredentials();
 
 }

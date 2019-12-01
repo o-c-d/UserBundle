@@ -2,6 +2,8 @@
 
 namespace Ocd\UserBundle\Model;
 
+use \DateTime;
+use \DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 trait AdvancedUserTrait
@@ -11,7 +13,7 @@ trait AdvancedUserTrait
      * DateTime of Password Expiration
      * => Login is not allowed after this date
      * => Is nullified on Password update
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      * 
      * @ORM\Column(name="password_expired_at", type="datetime", nullable=true, options={"default": NULL})
      */
@@ -20,7 +22,7 @@ trait AdvancedUserTrait
     /**
      * DateTime of Account Deletion
      * => Login is not allowed after this date
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      * 
      * @ORM\Column(name="account_deleted_at", type="datetime", nullable=true, options={"default": NULL})
      */
@@ -29,7 +31,7 @@ trait AdvancedUserTrait
     /**
      * DateTime of Account Expiration
      * => Login is not allowed after this date
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      * 
      * @ORM\Column(name="account_expired_at", type="datetime", nullable=true, options={"default": NULL})
      */
@@ -38,7 +40,7 @@ trait AdvancedUserTrait
     /**
      * DateTime of Account Lock
      * => Login is not allowed after this date
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      *
      * @ORM\Column(name="account_locked_at", type="datetime", nullable=true, options={"default": NULL})
      */
@@ -55,7 +57,7 @@ trait AdvancedUserTrait
     /**
      * Get dateTime of Password Expiration
      */ 
-    public function getPasswordExpiredAt()
+    public function getPasswordExpiredAt() :?DateTimeInterface
     {
         return $this->passwordExpiredAt;
     }
@@ -65,7 +67,7 @@ trait AdvancedUserTrait
      *
      * @return  self
      */ 
-    public function setPasswordExpiredAt($passwordExpiredAt)
+    public function setPasswordExpiredAt(?DateTimeInterface $passwordExpiredAt) :self
     {
         $this->passwordExpiredAt = $passwordExpiredAt;
 
@@ -75,7 +77,7 @@ trait AdvancedUserTrait
     /**
      * Get dateTime of Account Deletion
      */ 
-    public function getAccountDeletedAt()
+    public function getAccountDeletedAt() :?DateTimeInterface
     {
         return $this->accountDeletedAt;
     }
@@ -85,7 +87,7 @@ trait AdvancedUserTrait
      *
      * @return  self
      */ 
-    public function setAccountDeletedAt($accountDeletedAt)
+    public function setAccountDeletedAt(?DateTimeInterface $accountDeletedAt) :self
     {
         $this->accountDeletedAt = $accountDeletedAt;
 
@@ -95,7 +97,7 @@ trait AdvancedUserTrait
     /**
      * Get dateTime of Account Expiration
      */ 
-    public function getAccountExpiredAt()
+    public function getAccountExpiredAt() :?DateTimeInterface
     {
         return $this->accountExpiredAt;
     }
@@ -105,7 +107,7 @@ trait AdvancedUserTrait
      *
      * @return  self
      */ 
-    public function setAccountExpiredAt($accountExpiredAt)
+    public function setAccountExpiredAt(?DateTimeInterface $accountExpiredAt) :self
     {
         $this->accountExpiredAt = $accountExpiredAt;
 
@@ -115,7 +117,7 @@ trait AdvancedUserTrait
     /**
      * Get dateTime of Account Lock
      */ 
-    public function getAccountLockedAt()
+    public function getAccountLockedAt() :?DateTimeInterface
     {
         return $this->accountLockedAt;
     }
@@ -125,7 +127,7 @@ trait AdvancedUserTrait
      *
      * @return  self
      */ 
-    public function setAccountLockedAt($accountLockedAt)
+    public function setAccountLockedAt(?DateTimeInterface $accountLockedAt) :self
     {
         $this->accountLockedAt = $accountLockedAt;
 
@@ -135,7 +137,7 @@ trait AdvancedUserTrait
     /**
      * Get account is Enabled
      */ 
-    public function getAccountIsEnabled()
+    public function getAccountIsEnabled() :bool
     {
         return $this->accountIsEnabled;
     }
@@ -145,7 +147,7 @@ trait AdvancedUserTrait
      *
      * @return  self
      */ 
-    public function setAccountIsEnabled($accountIsEnabled)
+    public function setAccountIsEnabled(bool $accountIsEnabled)
     {
         $this->accountIsEnabled = $accountIsEnabled;
 
@@ -169,9 +171,9 @@ trait AdvancedUserTrait
      *
      * @see AccountExpiredException
      */
-    public function isAccountNonExpired()
+    public function isAccountNonExpired() :bool
     {
-        return ( is_null($this->account_expired_at) || $this->account_expired_at > new \DateTime() ) ;
+        return ( is_null($this->accountExpiredAt) || $this->accountExpiredAt > new DateTime() ) ;
     }
 
     /**
@@ -184,9 +186,9 @@ trait AdvancedUserTrait
      *
      * @see LockedException
      */
-    public function isAccountNonLocked()
+    public function isAccountNonLocked() :bool
     {
-        return ( is_null($this->account_locked_at) || $this->account_locked_at > new \DateTime() ) ;
+        return ( is_null($this->accountLockedAt) || $this->accountLockedAt > new DateTime() ) ;
     }
 
     /**
@@ -199,9 +201,9 @@ trait AdvancedUserTrait
      *
      * @see CredentialsExpiredException
      */
-    public function isCredentialsNonExpired()
+    public function isCredentialsNonExpired() :bool
     {
-        return ( is_null($this->password_expired_at) || $this->password_expired_at > new \DateTime() ) ;
+        return ( is_null($this->passwordExpiredAt) || $this->passwordExpiredAt > new DateTime() ) ;
     }
 
     /**
@@ -214,7 +216,7 @@ trait AdvancedUserTrait
      *
      * @see DisabledException
      */
-    public function isEnabled()
+    public function isEnabled() :bool
     {
         return $this->getAccountIsEnabled();
     }

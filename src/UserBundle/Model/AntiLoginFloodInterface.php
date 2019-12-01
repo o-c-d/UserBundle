@@ -2,6 +2,8 @@
 
 namespace Ocd\UserBundle\Model;
 
+use \DateTimeInterface;
+
 interface AntiLoginFloodInterface
 {
     /**
@@ -17,17 +19,17 @@ interface AntiLoginFloodInterface
      * @param integer $passFails
      * @return self
      */
-    public function setPassFails(int $passFails): self;
-    public function getLastFailAt(): ?\DateTime;
-    public function setLastFailAt(\DateTime $lastTry): self;
-    public function getLastSeenAt(): ?\DateTime;
-    public function setLastSeenAt(\DateTime $lastSeen): self;
-    public function getLastSeen(): ?\DateTime;
-    public function setLastSeen(\DateTime $lastSeen): self;
-    public function getLastIP(): ?\DateTime;
-    public function setLastIP(?\DateTime $lastIP): self;
-    public function getLastUA(): ?\DateTime;
-    public function setLastUA(?\DateTime $lastUA): self;
+    public function setPassFails(int $passFails);
+    public function newLoginFail();
+    public function newLoginSuccess();
+    public function getLastFailAt(): ?DateTimeInterface;
+    public function setLastFailAt(?DateTimeInterface $lastTry);
+    public function getLastSeenAt(): ?DateTimeInterface;
+    public function setLastSeenAt(?DateTimeInterface $lastSeen);
+    public function getLastIP(): ?string;
+    public function setLastIP(?string $lastIP);
+    public function getLastUA(): ?string;
+    public function setLastUA(?string $lastUA);
 
 }
 

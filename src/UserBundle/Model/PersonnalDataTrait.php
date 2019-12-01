@@ -11,7 +11,7 @@ trait PersonnalDataTrait
      * Full Name
      * @ORM\Column(name="fullName", type="string", nullable=true)
      */
-    private $fullName;
+    protected $fullName;
 
     /**
      * First Name

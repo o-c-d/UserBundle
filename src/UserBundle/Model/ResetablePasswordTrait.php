@@ -2,6 +2,7 @@
 
 namespace Ocd\UserBundle\Model;
 
+use \DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 trait ResetablePasswordTrait
@@ -24,7 +25,7 @@ trait ResetablePasswordTrait
     /**
      * Get dateTime of Password Reset Request
      */ 
-    public function getPasswordResetRequestedAt()
+    public function getPasswordResetRequestedAt() :DateTimeInterface
     {
         return $this->passwordResetRequestedAt;
     }
@@ -34,7 +35,7 @@ trait ResetablePasswordTrait
      *
      * @return  self
      */ 
-    public function setPasswordResetRequestedAt($passwordResetRequestedAt)
+    public function setPasswordResetRequestedAt(DateTimeInterface $passwordResetRequestedAt)
     {
         $this->passwordResetRequestedAt = $passwordResetRequestedAt;
 
@@ -44,7 +45,7 @@ trait ResetablePasswordTrait
     /**
      * Get password Reset Token
      */ 
-    public function getPasswordResetToken()
+    public function getPasswordResetToken() :?string
     {
         return $this->passwordResetToken;
     }
@@ -54,7 +55,7 @@ trait ResetablePasswordTrait
      *
      * @return  self
      */ 
-    public function setPasswordResetToken($passwordResetToken)
+    public function setPasswordResetToken(?string $passwordResetToken) :self
     {
         $this->passwordResetToken = $passwordResetToken;
 

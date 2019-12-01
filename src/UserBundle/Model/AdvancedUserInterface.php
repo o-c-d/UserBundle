@@ -2,22 +2,24 @@
 
 namespace Ocd\UserBundle\Model;
 
+use \DateTimeInterface;
+
 interface AdvancedUserInterface
 {
-    public function getPasswordExpiredAt();
-    public function setPasswordExpiredAt();
-    public function getAccountDeletedAt();
-    public function setAccountDeletedAt();
-    public function getAccountExpiredAt();
-    public function setAccountExpiredAt();
-    public function getAccountLockedAt();
-    public function setAccountLockedAt();
-    public function getAccountIsEnabled();
-    public function setAccountIsEnabled();
+    public function getPasswordExpiredAt() :?DateTimeInterface;
+    public function setPasswordExpiredAt(?DateTimeInterface $passwordExpiredAt);
+    public function getAccountDeletedAt() :?DateTimeInterface;
+    public function setAccountDeletedAt(?DateTimeInterface $accountDeletedAt);
+    public function getAccountExpiredAt() :?DateTimeInterface;
+    public function setAccountExpiredAt(?DateTimeInterface $accountExpiredAt);
+    public function getAccountLockedAt() :?DateTimeInterface;
+    public function setAccountLockedAt(?DateTimeInterface $accountLockedAt);
+    public function getAccountIsEnabled() :bool;
+    public function setAccountIsEnabled(bool $accountIsEnabled);
 
-    public function isAccountNonExpired();
-    public function isAccountNonLocked();
-    public function isCredentialsNonExpired();
-    public function isEnabled();
+    public function isAccountNonExpired() :bool;
+    public function isAccountNonLocked() :bool;
+    public function isCredentialsNonExpired() :bool;
+    public function isEnabled() :bool;
 }
 
