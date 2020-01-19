@@ -17,6 +17,12 @@ services:
         arguments: ['@ocd_user_login_manager', '%ocd_user.firewall_name%']
         tags: ['kernel.event_subscriber']
 
+    Ocd\UserBundle\EventListener\DoctrineListener:
+        arguments: ['@ocd_current_user_provider']
+        tags:
+            - { name: doctrine.event_listener, event: prePersist, priority: 500, connection: 'default' }
+            - { name: doctrine.event_listener, event: preUpdate, priority: 500, connection: 'default' }
+                
     Ocd\UserBundle\EventListener\LastLoginListener:
         arguments: ['@ocd_user_manager']
         tags: ['kernel.event_subscriber']
@@ -33,6 +39,11 @@ services:
 
     ocd_user_manager:
         alias: Ocd\UserBundle\Model\Manager\OcdUserManager
+
+    ocd_current_user_provider:
+        class: Ocd\UserBundle\Security\CurrentUserProvider
+        arguments: ['@security.token_storage']
+        public: true
 
     Ocd\UserBundle\Security\OcdUserProvider:
         arguments: ['%ocd_user.user_class%', '@doctrine', '@security.encoder_factory']

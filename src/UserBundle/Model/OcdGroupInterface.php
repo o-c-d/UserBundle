@@ -4,10 +4,6 @@ namespace Ocd\UserBundle\Model;
 
 interface OcdGroupInterface
 {
-    /**
-     * @return mixed
-     */
-    public function getId();
 
     /**
      * @return string
