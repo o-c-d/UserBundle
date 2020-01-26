@@ -13,14 +13,14 @@ interface BlameableInterface
      * @param   $createdBy
      * @return $this
      */
-    public function setCreatedBy( $createdBy);
+    public function setCreatedBy(?OcdUserInterface $createdBy);
 
     /**
      * Returns createdBy.
      *
      * @return OcdUserInterface
      */
-    public function getCreatedBy();
+    public function getCreatedBy() :?OcdUserInterface;
 
     /**
      * Sets updatedBy.
@@ -28,12 +28,12 @@ interface BlameableInterface
      * @param  $updatedBy
      * @return $this
      */
-    public function setUpdatedBy($updatedBy);
+    public function setUpdatedBy(?OcdUserInterface$updatedBy);
 
     /**
      * Returns updatedBy.
      *
      * @return OcdUserInterface
      */
-    public function getUpdatedBy();
+    public function getUpdatedBy() :?OcdUserInterface;
 }

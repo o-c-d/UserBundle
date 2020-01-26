@@ -2,6 +2,7 @@
 
 namespace Ocd\UserBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
 use Ocd\UserBundle\Model\OcdUserInterface;
 
 /**
@@ -12,18 +13,22 @@ trait BlameableTrait
 {
     /**
      * @var OcdUserInterface
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id")
      */
     private $createdBy;
 
     /**
      * @var OcdUserInterface
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id")
      */
     private $updatedBy;
 
     /**
      * {@inheritdoc}
      */
-    public function setCreatedBy( $createdBy)
+    public function setCreatedBy(?OcdUserInterface $createdBy)
     {
         $this->createdBy = $createdBy;
 
@@ -33,7 +38,7 @@ trait BlameableTrait
     /**
      * {@inheritdoc}
      */
-    public function getCreatedBy()
+    public function getCreatedBy() :?OcdUserInterface
     {
         return $this->createdBy;
     }
@@ -41,7 +46,7 @@ trait BlameableTrait
     /**
      * {@inheritdoc}
      */
-    public function setUpdatedBy( $updatedBy)
+    public function setUpdatedBy(?OcdUserInterface $updatedBy)
     {
         $this->updatedBy = $updatedBy;
 
@@ -51,7 +56,7 @@ trait BlameableTrait
     /**
      * {@inheritdoc}
      */
-    public function getUpdatedBy()
+    public function getUpdatedBy() :?OcdUserInterface
     {
         return $this->updatedBy;
     }

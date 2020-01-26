@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 abstract class OcdUserAbstract implements
     SymfonyUserInterface,
+    OcdUserInterface,
     AdvancedUserInterface,
     TimestampableInterface,
     ResetablePasswordInterface,
