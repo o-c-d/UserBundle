@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "OCD\\UserBundle\\": "src/UserBundle"
+      "Ocd\\UserBundle\\": "src/UserBundle"
     }
   }
 }
